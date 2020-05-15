@@ -1,24 +1,20 @@
-# pagseguro-test
+## About
 
-## Project setup
+PagSeguroDirectPayment.onSenderHashReady has returning undefined response only on ios. On browser &  android it's working fine.
+
+## Requirements
+
+* xcode
+* cordova & yarn installed globaly
+
+## Steps to reproduce
+
 ```
 yarn install
-```
 
-### Compiles and hot-reloads for development
-```
-yarn serve
-```
+cd src-cordova
+cordova platform add ios
+cd ...
 
-### Compiles and minifies for production
+yarn cordova-build-only-www-ios && cd src-cordova && cordova build ios --prod && cordova run ios
 ```
-yarn build
-```
-
-### Lints and fixes files
-```
-yarn lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
