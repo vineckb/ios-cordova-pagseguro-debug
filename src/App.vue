@@ -1,18 +1,41 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <p>Session ID: {{ session }}</p>
+    <p>Sender Hash: {{ senderHash }}</p>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import axios from 'axios';
 
 export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  }
+  data() {
+    return {
+      session: '',
+      senderHash: ''
+    }
+  },
+
+  mounted() {
+    axios.get('https://simba.mufasa.com.br/api.11lub.com.br/public/api/pagseguro').then(response => {
+      const javascript = document.createElement("script");
+      javascript.setAttribute("src", response.data.javascript);
+      document.head.appendChild(javascript);
+
+      javascript.onload = () => {
+        this.session = response.data.session_id;
+        window.PagSeguroDirectPayment.setSessionId(response.data.session_id);
+
+        window.PagSeguroDirectPayment.onSenderHashReady(response => {
+          if (!response || response.status === 'error') {
+            alert('Erro ao instanciar integração com pagseguro, reinicie o app para prosseguir com o pagamento');
+            return false;
+          }
+          this.senderHash = response.senderHash;
+        });
+      };
+    });
+  },
 }
 </script>
 
